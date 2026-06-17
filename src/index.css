@@ -1,14 +1,33 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Oswald", "Inter", sans-serif;
+
+  --color-background: #0a0a0b;
+  --color-surface: #111113;
+  --color-surface-2: #17171a;
+  --color-border: #26262b;
+  --color-border-strong: #34343b;
+  --color-foreground: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-subtle: #71717a;
+  --color-brand: #e11d2a;
+  --color-brand-strong: #b91520;
+  --color-brand-soft: rgba(225, 29, 42, 0.12);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: #0f0f0f;
-  color: white;
-  font-family: Inter, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -16,5 +35,38 @@ body {
 }
 
 section {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 88px;
+}
+
+/* Consistent section rhythm */
+.section {
+  padding-block: 5rem;
+}
+@media (min-width: 768px) {
+  .section {
+    padding-block: 7rem;
+  }
+}
+
+/* Athletic display headings */
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+}
+
+/* Section eyebrow label */
+.eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--color-brand);
+}
+
+/* Swiper tweaks */
+.swiper {
+  padding-block: 0.25rem;
 }

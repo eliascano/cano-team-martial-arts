@@ -1,30 +1,24 @@
 function Footer() {
   return (
-    <footer className="bg-black border-t border-red-900">
-      <div className="max-w-7xl mx-auto px-6 py-10">
-
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-
+    <footer className="border-t border-border bg-background">
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <img
             src="/images/logo-cano-team.png"
             alt="Cano Team"
             className="h-16"
           />
 
-          <div className="text-center md:text-right">
-
-            <p>Taekwondo ITF</p>
-            <p>Brazilian Jiu-Jitsu</p>
-            <p>MMA</p>
-
-          </div>
-
+          <ul className="flex flex-col items-center gap-2 text-sm text-muted md:items-end">
+            <li>Taekwondo ITF</li>
+            <li>Brazilian Jiu-Jitsu</li>
+            <li>MMA</li>
+          </ul>
         </div>
 
-        <div className="mt-8 text-center text-zinc-500">
-          © 2026 Cano Team Martial Arts
+        <div className="mt-10 border-t border-border pt-6 text-center text-sm text-subtle">
+          &copy; 2026 Cano Team Martial Arts
         </div>
-
       </div>
     </footer>
   );

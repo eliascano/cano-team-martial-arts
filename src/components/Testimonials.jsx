@@ -1,36 +1,41 @@
+import { motion } from "framer-motion";
+import { FaQuoteLeft } from "react-icons/fa";
 import { testimonials } from "../data/testimonials";
+import SectionHeading from "./SectionHeading";
 
 function Testimonials() {
   return (
-    <section
-      id="testimonios"
-      className="py-22 bg-black"
-    >
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="testimonios" className="section bg-surface">
+      <div className="mx-auto max-w-7xl px-6">
+        <SectionHeading
+          eyebrow="Testimonios"
+          title="Lo que dicen nuestros alumnos"
+          subtitle="Experiencias reales de quienes entrenan y crecen junto a Cano Team."
+        />
 
-        <h2 className="text-4xl font-bold text-center mb-12">
-          Lo que dicen nuestros alumnos
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-
-          {testimonials.map(testimonial => (
-            <article
+        <div className="grid gap-8 md:grid-cols-3">
+          {testimonials.map((testimonial, i) => (
+            <motion.article
               key={testimonial.name}
-              className="bg-zinc-900 rounded-xl p-6"
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+              className="flex flex-col rounded-2xl border border-border bg-surface-2 p-8 transition-colors duration-300 hover:border-border-strong"
             >
-              <p className="text-zinc-400 mb-4">
-                "{testimonial.text}"
+              <FaQuoteLeft
+                aria-hidden="true"
+                className="text-2xl text-brand"
+              />
+              <p className="mt-4 flex-1 leading-relaxed text-muted">
+                {testimonial.text}
               </p>
-
-              <h3 className="font-bold text-red-500">
+              <h3 className="display mt-6 text-lg font-semibold text-foreground">
                 {testimonial.name}
               </h3>
-            </article>
+            </motion.article>
           ))}
-
         </div>
-
       </div>
     </section>
   );
