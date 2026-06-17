@@ -1,0 +1,33 @@
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Disciplines from "./components/Disciplines";
+import Schedule from "./components/Schedule";
+import Events from "./components/Events";
+import About from "./components/About";
+import Gallery from "./components/Gallery";
+import Testimonials from "./components/Testimonials";
+import Footer from "./components/Footer";
+import Contact from "./components/Contact";
+import WhatsAppButton from "./components/WhatsAppButton";
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <About />          
+        <Disciplines />   
+        <Schedule />       
+        <Gallery />       
+        <Events />       
+        <Testimonials />  
+        <Contact />     
+      </main>
+      <WhatsAppButton />
+      <Footer />
+    </>
+  );
+}
+
+export default App;
