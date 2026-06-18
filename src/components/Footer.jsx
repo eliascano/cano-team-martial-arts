@@ -3,12 +3,12 @@ function Footer() {
     {
       src: "/logo-taekwondo-itf.png",
       alt: "Taekwon-Do ITF",
-      className: "h-12 sm:h-14",
+      className: "h-16 sm:h-18",
     },
     {
       src: "/logo-ralph-gracie.png",
       alt: "Ralph Gracie",
-      className: "h-12 sm:h-14",
+      className: "h-16 sm:h-18",
     },
   ];
 
@@ -18,7 +18,7 @@ function Footer() {
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-5 md:justify-start">
             <img
-              src="/images/logo-cano-team.png"
+              src="/logo-cano-team_4x4.png"
               alt="Cano Team"
               className="h-20 w-auto sm:h-24"
             />
