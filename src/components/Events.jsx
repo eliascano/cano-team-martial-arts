@@ -6,7 +6,7 @@ import {
   FaClock,
 } from "react-icons/fa";
 
-import { getEvents } from "../services/event";
+import { getEvents } from "../services/events";
 import SectionHeading from "./SectionHeading";
 
 function Events() {
