@@ -25,6 +25,7 @@ function App() {
         <Testimonials />  
         <Contact />     
       </main>
+      <BackToTop />
       <WhatsAppButton />
       <Footer />
     </>

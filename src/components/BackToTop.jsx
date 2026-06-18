@@ -7,14 +7,22 @@ function BackToTop() {
 
   useEffect(() => {
     const onScroll = () => {
-      // Show once the user has scrolled past the Hero (roughly one viewport)
-      setVisible(window.scrollY > window.innerHeight * 0.9);
+      const hero = document.getElementById("inicio");
+      const heroBottom = hero
+        ? hero.offsetTop + hero.offsetHeight
+        : window.innerHeight;
+
+      setVisible(window.scrollY >= heroBottom - 1);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     onScroll();
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -34,7 +42,7 @@ function BackToTop() {
           transition={{ type: "spring", stiffness: 200, damping: 18 }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-foreground shadow-xl shadow-black/30 transition-colors hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-xl shadow-black/30 transition-colors hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
           <FaArrowUp />
         </motion.button>
