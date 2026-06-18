@@ -19,10 +19,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  overflow-x: hidden;
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
@@ -32,6 +35,19 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
 }
 
 section {
