@@ -5,7 +5,7 @@ export async function getEvents() {
     const { data, error } = await supabase
       .from("events")
       .select("*")
-      .order("date", { ascending: true });
+      .order("id", { ascending: false });
 
     if (error) {
       throw new Error("Error al obtener eventos: " + error.message);
