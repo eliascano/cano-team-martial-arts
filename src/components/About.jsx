@@ -69,7 +69,7 @@ function About() {
           >
             <div className="absolute -inset-4 -z-10 rounded-2xl bg-brand-soft blur-2xl" />
             <img
-              src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438"
+              src="/images/pablo-cano.png"
               alt="Entrenamiento en Cano Team"
               className="h-[420px] w-full rounded-2xl object-cover shadow-2xl ring-1 ring-border md:h-[500px]"
             />
