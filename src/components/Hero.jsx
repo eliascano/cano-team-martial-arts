@@ -22,7 +22,7 @@ function Hero() {
 
       {/* Layered overlays for depth and legibility */}
       <div className="absolute inset-0 bg-background/80" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-background/60" />
 
       <motion.div
         initial="hidden"
