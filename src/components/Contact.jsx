@@ -6,9 +6,9 @@ const whatsappNumber = "543564657525";
 
 const disciplines = [
   {
-    name: "Taekwondo ITF",
+    name: "Taekwon-Do ITF",
     message:
-      "Hola Pablo! Quiero aprender Taekwondo ITF. ¿Podrías pasarme información?",
+      "Hola Pablo! Quiero aprender Taekwon-Do ITF. ¿Podrías pasarme información?",
   },
   {
     name: "Brazilian Jiu-Jitsu",

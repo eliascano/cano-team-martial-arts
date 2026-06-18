@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { getSchedules } from "../services/schedule";
 import SectionHeading from "./SectionHeading";
 
-const DISCIPLINE_ORDER = ["MMA", "Brazilian Jiu-Jitsu", "Taekwondo ITF"];
+const DISCIPLINE_ORDER = ["MMA", "Brazilian Jiu-Jitsu", "Taekwon-Do ITF"];
 
 function groupSchedules(schedules) {
   const map = {};

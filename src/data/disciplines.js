@@ -1,6 +1,6 @@
 export const disciplines = [
   {
-    name: "Taekwondo ITF",
+    name: "Taekwon-Do ITF",
     image:
       "https://images.unsplash.com/photo-1555597673-b21d5c935865",
     description:

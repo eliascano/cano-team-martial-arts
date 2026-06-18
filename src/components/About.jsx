@@ -30,7 +30,7 @@ function About() {
               </p>
               <p>
                 Nuestro objetivo es formar personas disciplinadas, respetuosas y
-                perseverantes a través del Taekwondo ITF, Brazilian Jiu-Jitsu y
+                perseverantes a través del Taekwon-Do ITF, Brazilian Jiu-Jitsu y
                 MMA.
               </p>
               <p>

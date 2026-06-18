@@ -60,7 +60,7 @@ function Hero() {
           }}
           className="mx-auto mt-5 max-w-2xl text-lg font-semibold text-brand sm:text-xl md:text-2xl text-balance"
         >
-          Brazilian Jiu-Jitsu &bull; MMA &bull; Taekwondo ITF
+          Brazilian Jiu-Jitsu &bull; MMA &bull; Taekwon-Do ITF
         </motion.h2>
 
         <motion.p

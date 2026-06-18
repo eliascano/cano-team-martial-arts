@@ -10,7 +10,7 @@ function Footer() {
           />
 
           <ul className="flex flex-col items-center gap-2 text-sm text-muted md:items-end">
-            <li>Taekwondo ITF</li>
+            <li>Taekwon-Do ITF</li>
             <li>Brazilian Jiu-Jitsu</li>
             <li>MMA</li>
           </ul>
