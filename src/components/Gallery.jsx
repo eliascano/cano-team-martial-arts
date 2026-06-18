@@ -63,6 +63,8 @@ function Gallery() {
               }}
               pagination={{
                 clickable: true,
+                bulletClass: "ct-bullet",
+                bulletActiveClass: "ct-bullet-active",
               }}
               breakpoints={{
                 768: {

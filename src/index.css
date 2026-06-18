@@ -70,3 +70,34 @@ section {
 .swiper {
   padding-block: 0.25rem;
 }
+
+/* Modern, high-contrast gallery pagination (bar style) */
+.swiper-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  bottom: 0 !important;
+}
+
+.ct-bullet {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.3rem;
+  border-radius: 9999px;
+  background: var(--color-border-strong);
+  opacity: 1;
+  cursor: pointer;
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.ct-bullet:hover {
+  background: var(--color-muted);
+}
+
+.ct-bullet-active {
+  width: 2.75rem;
+  background: var(--color-brand);
+}
