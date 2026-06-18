@@ -40,7 +40,7 @@ function Hero() {
           }}
           className="eyebrow inline-block"
         >
-          Cano Team Martial Arts
+          Academia de Artes Marciales
         </motion.span>
 
         <motion.h1
