@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaQuoteLeft } from "react-icons/fa";
-import { getTestimonials } from "../services/testimonial";
+import { getTestimonials } from "../services/testimonials";
 import SectionHeading from "./SectionHeading"; 
 
 function Testimonials() {
