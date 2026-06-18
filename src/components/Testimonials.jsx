@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FaQuoteLeft } from "react-icons/fa";
-import { testimonials } from "../data/testimonials";
+import { testimonials } from "../services/testimonials";
 import SectionHeading from "./SectionHeading";
 
 function Testimonials() {
