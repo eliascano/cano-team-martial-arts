@@ -116,27 +116,6 @@ function Hero() {
           ))}
         </motion.dl>
       </motion.div>
-
-      {/* Scroll cue — minimal, tucked into the bottom-right corner so it never overlaps content */}
-      <motion.a
-        href="#nosotros"
-        aria-label="Desplazar a la siguiente sección"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="group absolute bottom-8 right-8 z-10 hidden flex-col items-center gap-3 lg:flex"
-      >
-        <span className="[writing-mode:vertical-rl] text-[0.7rem] font-medium uppercase tracking-[0.25em] text-subtle transition-colors group-hover:text-foreground">
-          Desliza
-        </span>
-        <span className="relative h-12 w-px overflow-hidden bg-border-strong">
-          <motion.span
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-x-0 top-0 h-1/2 bg-brand"
-          />
-        </span>
-      </motion.a>
     </section>
   );
 }

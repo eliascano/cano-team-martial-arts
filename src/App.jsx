@@ -9,6 +9,7 @@ import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
 import WhatsAppButton from "./components/WhatsAppButton";
+import BackToTop from "./components/BackToTop";
 
 function App() {
   return (
