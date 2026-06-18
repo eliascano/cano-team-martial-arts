@@ -62,14 +62,14 @@ function Events() {
                 className="group overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-brand hover:shadow-xl hover:shadow-brand/10"
               >
                 {event.image_url && (
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-72 overflow-hidden sm:h-80">
                     <img
                       src={event.image_url}
                       alt={event.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-surface to-transparent" />
                   </div>
                 )}
 
