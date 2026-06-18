@@ -16,4 +16,4 @@ export async function getGallery() {
     console.error(error);
     return [];
   }
-} 
+}  
