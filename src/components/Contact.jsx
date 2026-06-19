@@ -1,4 +1,9 @@
-import { FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
+import {
+  FaWhatsapp,
+  FaInstagram,
+  FaFacebook,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 
@@ -94,6 +99,20 @@ function Contact() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="overflow-hidden rounded-2xl border border-border"
           >
+            <div className="flex items-center gap-3 border-b border-border bg-surface-2 px-6 py-4">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+                <FaMapMarkerAlt aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
+                  Dirección
+                </p>
+                <p className="font-semibold text-foreground">
+                  San Juan 918, San Francisco, Córdoba
+                </p>
+              </div>
+            </div>
+
             <iframe
               title="Mapa Cano Team"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3404.7207926137885!2d-62.08131732476506!3d-31.421817874259283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95cb2937a08c3f7d%3A0xa2a0c4983b37b730!2sCano%20Team%20Martial%20Arts!5e0!3m2!1ses!2sar!4v1781097715119!5m2!1ses!2sar"

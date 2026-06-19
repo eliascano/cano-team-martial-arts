@@ -51,7 +51,7 @@ iframe {
 }
 
 section {
-  scroll-margin-top: 88px;
+  scroll-margin-top: 0;
 }
 
 /* Consistent section rhythm */

@@ -10,7 +10,11 @@ function groupSchedules(schedules) {
   for (const s of schedules) {
     if (!map[s.discipline]) map[s.discipline] = {};
     if (!map[s.discipline][s.group_name]) map[s.discipline][s.group_name] = [];
-    map[s.discipline][s.group_name].push({ days: s.days, time: s.time, id: s.id });
+    map[s.discipline][s.group_name].push({
+      days: s.days,
+      time: s.time,
+      id: s.id,
+    });
   }
   return map;
 }
@@ -72,7 +76,46 @@ function Schedule() {
                   </h3>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="divide-y divide-border md:hidden">
+                  {Object.entries(grouped[discipline]).map(([groupName, slots]) => (
+                    <div key={groupName} className="px-5 py-5">
+                      <h4 className="display text-base font-semibold text-foreground">
+                        {groupName}
+                      </h4>
+
+                      <div className="mt-3 flex flex-col gap-3">
+                        {slots.map((slot) => (
+                          <div
+                            key={slot.id}
+                            className="rounded-xl border border-border bg-background/40 p-4"
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div>
+                                <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
+                                  Días
+                                </p>
+                                <p className="mt-1 text-sm leading-relaxed text-muted">
+                                  {slot.days}
+                                </p>
+                              </div>
+
+                              <div className="shrink-0 text-right">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
+                                  Horario
+                                </p>
+                                <p className="mt-1 text-sm font-semibold text-foreground">
+                                  {slot.time}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="hidden md:block">
                   <table className="w-full min-w-[420px]">
                     <thead>
                       <tr className="text-xs uppercase tracking-wider text-subtle">
