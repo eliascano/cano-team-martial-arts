@@ -32,10 +32,21 @@ function Gallery() {
     <section id="galeria" className="section bg-surface">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          eyebrow="Momentos"
-          title="Galería"
-          subtitle="Competencias, exámenes y entrenamientos que reflejan el espíritu de Cano Team."
+          eyebrow="Comunidad"
+          title="Galería Cano Team"
+          subtitle="Entrenamientos, competencias, exámenes, eventos y momentos compartidos dentro y fuera del tatami."
         />
+
+        <div className="mx-auto mb-8 grid max-w-4xl gap-3 sm:grid-cols-3">
+          {["Entrenamientos", "Eventos", "Exámenes y torneos"].map((item) => (
+            <div
+              key={item}
+              className="rounded-xl border border-border bg-background/40 px-4 py-3 text-center text-sm font-semibold text-muted"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 28 }}

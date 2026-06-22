@@ -82,10 +82,12 @@ function Hero() {
           className="mt-10 flex flex-col justify-center gap-4 sm:flex-row"
         >
           <a
-            href="#contacto"
+            href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
+            target="_blank"
+            rel="noreferrer"
             className="rounded-lg bg-brand px-8 py-4 font-semibold text-foreground shadow-lg shadow-brand/20 transition-all duration-300 hover:bg-brand-strong hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
-            Empezar Ahora
+            Reservar Clase de Prueba
           </a>
 
           <a

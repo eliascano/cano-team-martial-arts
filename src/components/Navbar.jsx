@@ -1,30 +1,43 @@
 import { useEffect, useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaChevronDown, FaTimes, FaWhatsapp } from "react-icons/fa";
 
-// Full list of sections (used in the mobile menu)
-const allLinks = [
-  { label: "Inicio", id: "inicio" },
-  { label: "Nosotros", id: "nosotros" },
-  { label: "Disciplinas", id: "disciplinas" },
-  { label: "Horarios", id: "horarios" },
-  { label: "Galería", id: "galeria" },
-  { label: "Eventos", id: "eventos" },
-  { label: "Testimonios", id: "testimonios" },
-  { label: "Contacto", id: "contacto" },
+const navGroups = [
+  {
+    label: "Entrenar",
+    items: [
+      { label: "Disciplinas", id: "disciplinas" },
+      { label: "Horarios", id: "horarios" },
+      { label: "Preguntas frecuentes", id: "preguntas" },
+    ],
+  },
+  {
+    label: "Academia",
+    items: [
+      { label: "Nosotros", id: "nosotros" },
+      { label: "Instructor", id: "instructor" },
+      { label: "Testimonios", id: "testimonios" },
+    ],
+  },
+  {
+    label: "Comunidad",
+    items: [
+      { label: "Galería", id: "galeria" },
+      { label: "Eventos", id: "eventos" },
+    ],
+  },
 ];
 
-// Curated primary links shown on desktop to reduce visual noise
-const primaryLinks = [
-  { label: "Nosotros", id: "nosotros" },
-  { label: "Disciplinas", id: "disciplinas" },
-  { label: "Horarios", id: "horarios" },
-  { label: "Galería", id: "galeria" },
+const allLinks = [
+  { label: "Inicio", id: "inicio" },
+  ...navGroups.flatMap((group) => group.items),
+  { label: "Contacto", id: "contacto" },
 ];
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("inicio");
+  const [desktopMenu, setDesktopMenu] = useState(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -33,7 +46,6 @@ function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Scrollspy: highlight the section currently in view
   useEffect(() => {
     const sections = allLinks
       .map((link) => document.getElementById(link.id))
@@ -53,16 +65,21 @@ function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const closeMenus = () => {
+    setOpen(false);
+    setDesktopMenu(null);
+  };
+
   return (
     <header
       className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl"
+          ? "border-b border-border bg-background/90 backdrop-blur-xl"
           : "border-b border-transparent bg-gradient-to-b from-background/70 to-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#inicio" aria-label="Cano Team Martial Arts - inicio">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
+        <a href="#inicio" aria-label="Cano Team Martial Arts - inicio" onClick={closeMenus}>
           <img
             src="/images/logo-cano-team.png"
             alt="Cano Team Martial Arts"
@@ -70,40 +87,99 @@ function Navbar() {
           />
         </a>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {primaryLinks.map((link) => {
-            const isActive = active === link.id;
+        <div className="hidden items-center gap-1 lg:flex">
+          <a
+            href="#inicio"
+            onClick={closeMenus}
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              active === "inicio"
+                ? "text-foreground"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            Inicio
+          </a>
+
+          {navGroups.map((group) => {
+            const groupActive = group.items.some((item) => item.id === active);
+            const isOpen = desktopMenu === group.label;
+
             return (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                aria-current={isActive ? "true" : undefined}
-                className={`relative px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-foreground"
-                    : "text-muted hover:text-foreground"
-                }`}
+              <div
+                key={group.label}
+                className="relative"
+                onMouseEnter={() => setDesktopMenu(group.label)}
+                onMouseLeave={() => setDesktopMenu(null)}
               >
-                {link.label}
-                <span
-                  className={`absolute inset-x-3 -bottom-0.5 h-px origin-left bg-brand transition-transform duration-300 ${
-                    isActive ? "scale-x-100" : "scale-x-0"
+                <button
+                  type="button"
+                  onClick={() => setDesktopMenu(isOpen ? null : group.label)}
+                  aria-expanded={isOpen}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    groupActive
+                      ? "text-foreground"
+                      : "text-muted hover:text-foreground"
                   }`}
-                />
-              </a>
+                >
+                  {group.label}
+                  <FaChevronDown
+                    aria-hidden="true"
+                    className={`text-xs transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div className="absolute left-0 top-full w-56 pt-3">
+                    <div className="overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                      {group.items.map((item) => (
+                        <a
+                          key={item.id}
+                          href={`#${item.id}`}
+                          onClick={closeMenus}
+                          aria-current={active === item.id ? "true" : undefined}
+                          className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                            active === item.id
+                              ? "bg-brand-soft text-foreground"
+                              : "text-muted hover:bg-surface hover:text-foreground"
+                          }`}
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
 
           <a
             href="#contacto"
-            className="ml-4 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm shadow-brand/20 transition-all duration-300 hover:bg-brand-strong hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            onClick={closeMenus}
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              active === "contacto"
+                ? "text-foreground"
+                : "text-muted hover:text-foreground"
+            }`}
           >
-            Empezar
+            Contacto
+          </a>
+
+          <a
+            href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-3 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <FaWhatsapp aria-hidden="true" />
+            Clase de prueba
           </a>
         </div>
 
         <button
-          className="text-2xl text-foreground md:hidden"
+          className="rounded-lg border border-border bg-background/60 p-3 text-xl text-foreground lg:hidden"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
@@ -113,29 +189,68 @@ function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-background md:hidden">
-          {allLinks.map((link) => (
+        <div className="max-h-[calc(100svh-76px)] overflow-y-auto border-t border-border bg-background lg:hidden">
+          <div className="px-5 py-5">
             <a
-              key={link.id}
-              href={`#${link.id}`}
-              aria-current={active === link.id ? "true" : undefined}
-              className={`block border-b border-border px-6 py-4 text-sm font-medium transition-colors ${
-                active === link.id
-                  ? "border-l-2 border-l-brand bg-surface text-foreground"
-                  : "text-muted hover:bg-surface hover:text-foreground"
+              href="#inicio"
+              onClick={closeMenus}
+              className={`block rounded-lg px-4 py-3 text-sm font-semibold ${
+                active === "inicio"
+                  ? "bg-brand-soft text-foreground"
+                  : "text-muted"
               }`}
-              onClick={() => setOpen(false)}
             >
-              {link.label}
+              Inicio
             </a>
-          ))}
-          <div className="p-4">
+
+            <div className="mt-3 space-y-5">
+              {navGroups.map((group) => (
+                <div key={group.label}>
+                  <p className="px-4 text-xs font-semibold uppercase tracking-wider text-brand">
+                    {group.label}
+                  </p>
+                  <div className="mt-2 overflow-hidden rounded-xl border border-border bg-surface">
+                    {group.items.map((item) => (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        onClick={closeMenus}
+                        aria-current={active === item.id ? "true" : undefined}
+                        className={`block border-b border-border px-4 py-3 text-sm font-medium last:border-b-0 ${
+                          active === item.id
+                            ? "border-l-2 border-l-brand bg-surface-2 text-foreground"
+                            : "text-muted"
+                        }`}
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <a
               href="#contacto"
-              onClick={() => setOpen(false)}
-              className="block rounded-lg bg-brand px-5 py-3 text-center text-sm font-semibold text-foreground transition-colors hover:bg-brand-strong"
+              onClick={closeMenus}
+              className={`mt-5 block rounded-lg px-4 py-3 text-sm font-semibold ${
+                active === "contacto"
+                  ? "bg-brand-soft text-foreground"
+                  : "text-muted"
+              }`}
             >
-              Empezar
+              Contacto
+            </a>
+
+            <a
+              href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
+              target="_blank"
+              rel="noreferrer"
+              onClick={closeMenus}
+              className="mt-4 flex items-center justify-center gap-3 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white"
+            >
+              <FaWhatsapp aria-hidden="true" />
+              Reservar clase de prueba
             </a>
           </div>
         </div>

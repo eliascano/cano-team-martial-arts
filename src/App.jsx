@@ -6,6 +6,7 @@ import Events from "./components/Events";
 import About from "./components/About";
 import Gallery from "./components/Gallery";
 import Testimonials from "./components/Testimonials";
+import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -23,6 +24,7 @@ function App() {
         <Gallery />       
         <Events />       
         <Testimonials />  
+        <FAQ />
         <Contact />     
       </main>
       <BackToTop />

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { FaCalendarAlt } from "react-icons/fa";
 import { disciplines } from "../data/disciplines";
 import SectionHeading from "./SectionHeading";
 
@@ -38,6 +39,14 @@ function Disciplines() {
                 <p className="mt-3 leading-relaxed text-muted">
                   {discipline.description}
                 </p>
+
+                <a
+                  href="#horarios"
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border-strong px-4 py-2.5 text-sm font-semibold text-foreground transition-all duration-300 hover:border-brand hover:bg-brand-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  <FaCalendarAlt aria-hidden="true" />
+                  Ver horarios
+                </a>
               </div>
             </motion.article>
           ))}

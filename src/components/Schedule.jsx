@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { FaChevronDown, FaWhatsapp } from "react-icons/fa";
 import { getSchedules } from "../services/schedule";
 import SectionHeading from "./SectionHeading";
 
 const DISCIPLINE_ORDER = ["MMA", "Brazilian Jiu-Jitsu", "Taekwon-Do ITF"];
+const WHATSAPP_NUMBER = "543564657525";
 
 function groupSchedules(schedules) {
   const map = {};
@@ -22,6 +24,7 @@ function groupSchedules(schedules) {
 function Schedule() {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openDisciplines, setOpenDisciplines] = useState(["MMA"]);
 
   useEffect(() => {
     async function fetchSchedules() {
@@ -39,6 +42,19 @@ function Schedule() {
 
   const grouped = groupSchedules(schedules);
   const disciplines = DISCIPLINE_ORDER.filter((d) => grouped[d]);
+
+  const toggleDiscipline = (discipline) => {
+    setOpenDisciplines((current) =>
+      current.includes(discipline)
+        ? current.filter((item) => item !== discipline)
+        : [...current, discipline]
+    );
+  };
+
+  const getWhatsappHref = (discipline) => {
+    const message = `Hola Pablo! Quiero consultar por los horarios de ${discipline}. ¿Me pasás información?`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <section id="horarios" className="section bg-background">
@@ -69,94 +85,123 @@ function Schedule() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="overflow-hidden rounded-2xl border border-border bg-surface"
               >
-                <div className="flex items-center gap-3 border-b border-border bg-surface-2 px-6 py-4">
-                  <span className="h-5 w-1 rounded-full bg-brand" />
-                  <h3 className="display text-lg font-bold text-foreground">
-                    {discipline}
-                  </h3>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleDiscipline(discipline)}
+                  aria-expanded={openDisciplines.includes(discipline)}
+                  className="flex w-full items-center justify-between gap-4 border-b border-border bg-surface-2 px-5 py-4 text-left transition-colors hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand sm:px-6"
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="h-5 w-1 rounded-full bg-brand" />
+                    <span className="display text-lg font-bold text-foreground">
+                      {discipline}
+                    </span>
+                  </span>
+                  <FaChevronDown
+                    aria-hidden="true"
+                    className={`shrink-0 text-brand transition-transform duration-300 ${
+                      openDisciplines.includes(discipline) ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-                <div className="divide-y divide-border md:hidden">
-                  {Object.entries(grouped[discipline]).map(([groupName, slots]) => (
-                    <div key={groupName} className="px-5 py-5">
-                      <h4 className="display text-base font-semibold text-foreground">
-                        {groupName}
-                      </h4>
+                {openDisciplines.includes(discipline) && (
+                  <>
+                    <div className="divide-y divide-border md:hidden">
+                      {Object.entries(grouped[discipline]).map(([groupName, slots]) => (
+                        <div key={groupName} className="px-5 py-5">
+                          <h4 className="display text-base font-semibold text-foreground">
+                            {groupName}
+                          </h4>
 
-                      <div className="mt-3 flex flex-col gap-3">
-                        {slots.map((slot) => (
-                          <div
-                            key={slot.id}
-                            className="rounded-xl border border-border bg-background/40 p-4"
-                          >
-                            <div className="flex items-start justify-between gap-4">
-                              <div>
-                                <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
-                                  Días
-                                </p>
-                                <p className="mt-1 text-sm leading-relaxed text-muted">
-                                  {slot.days}
-                                </p>
+                          <div className="mt-3 flex flex-col gap-3">
+                            {slots.map((slot) => (
+                              <div
+                                key={slot.id}
+                                className="rounded-xl border border-border bg-background/40 p-4"
+                              >
+                                <div className="flex items-start justify-between gap-4">
+                                  <div>
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
+                                      Días
+                                    </p>
+                                    <p className="mt-1 text-sm leading-relaxed text-muted">
+                                      {slot.days}
+                                    </p>
+                                  </div>
+
+                                  <div className="shrink-0 text-right">
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
+                                      Horario
+                                    </p>
+                                    <p className="mt-1 text-sm font-semibold text-foreground">
+                                      {slot.time}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-
-                              <div className="shrink-0 text-right">
-                                <p className="text-xs font-semibold uppercase tracking-wider text-subtle">
-                                  Horario
-                                </p>
-                                <p className="mt-1 text-sm font-semibold text-foreground">
-                                  {slot.time}
-                                </p>
-                              </div>
-                            </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                <div className="hidden md:block">
-                  <table className="w-full min-w-[420px]">
-                    <thead>
-                      <tr className="text-xs uppercase tracking-wider text-subtle">
-                        <th className="w-2/5 px-6 py-3 text-left font-semibold">
-                          Grupo
-                        </th>
-                        <th className="w-2/5 px-6 py-3 text-left font-semibold">
-                          Días
-                        </th>
-                        <th className="w-1/5 px-6 py-3 text-left font-semibold">
-                          Horario
-                        </th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {Object.entries(grouped[discipline]).map(([groupName, slots]) =>
-                        slots.map((slot, idx) => (
-                          <tr
-                            key={slot.id}
-                            className="border-t border-border transition-colors hover:bg-surface-2"
-                          >
-                            <td className="px-6 py-4">
-                              {idx === 0 && (
-                                <span className="text-sm font-semibold text-foreground">
-                                  {groupName}
-                                </span>
-                              )}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-muted">
-                              {slot.days}
-                            </td>
-                            <td className="px-6 py-4 text-sm font-semibold text-foreground">
-                              {slot.time}
-                            </td>
+                    <div className="hidden md:block">
+                      <table className="w-full min-w-[420px]">
+                        <thead>
+                          <tr className="text-xs uppercase tracking-wider text-subtle">
+                            <th className="w-2/5 px-6 py-3 text-left font-semibold">
+                              Grupo
+                            </th>
+                            <th className="w-2/5 px-6 py-3 text-left font-semibold">
+                              Días
+                            </th>
+                            <th className="w-1/5 px-6 py-3 text-left font-semibold">
+                              Horario
+                            </th>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                        </thead>
+
+                        <tbody>
+                          {Object.entries(grouped[discipline]).map(([groupName, slots]) =>
+                            slots.map((slot, idx) => (
+                              <tr
+                                key={slot.id}
+                                className="border-t border-border transition-colors hover:bg-surface-2"
+                              >
+                                <td className="px-6 py-4">
+                                  {idx === 0 && (
+                                    <span className="text-sm font-semibold text-foreground">
+                                      {groupName}
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-muted">
+                                  {slot.days}
+                                </td>
+                                <td className="px-6 py-4 text-sm font-semibold text-foreground">
+                                  {slot.time}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="border-t border-border px-5 py-4 sm:px-6">
+                      <a
+                        href={getWhatsappHref(discipline)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
+                      >
+                        <FaWhatsapp aria-hidden="true" />
+                        Consultar esta disciplina
+                      </a>
+                    </div>
+                  </>
+                )}
               </motion.div>
             ))}
           </div>
