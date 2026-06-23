@@ -9,9 +9,16 @@ import SectionHeading from "./SectionHeading";
 import "swiper/css";
 import "swiper/css/pagination";
 
+const gallerySections = [
+  { code: "EV", label: "Eventos" },
+  { code: "EN", label: "Entrenamientos" },
+  { code: "EX", label: "Exámenes y torneos" },
+];
+
 function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState("EV");
 
   useEffect(() => {
     async function loadGallery() {
@@ -28,6 +35,11 @@ function Gallery() {
     loadGallery();
   }, []);
 
+  const hasSectionData = images.some((image) => Boolean(image.seccion));
+  const filteredImages = hasSectionData
+    ? images.filter((image) => image.seccion === activeSection)
+    : images;
+
   return (
     <section id="galeria" className="section bg-surface">
       <div className="mx-auto max-w-7xl px-6">
@@ -38,13 +50,20 @@ function Gallery() {
         />
 
         <div className="mx-auto mb-8 grid max-w-4xl gap-3 sm:grid-cols-3">
-          {["Entrenamientos", "Eventos", "Exámenes y torneos"].map((item) => (
-            <div
-              key={item}
-              className="rounded-xl border border-border bg-background/40 px-4 py-3 text-center text-sm font-semibold text-muted"
+          {gallerySections.map((section) => (
+            <button
+              key={section.code}
+              type="button"
+              onClick={() => setActiveSection(section.code)}
+              aria-pressed={activeSection === section.code}
+              className={`min-h-11 rounded-xl border px-4 py-3 text-center text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                activeSection === section.code
+                  ? "border-brand bg-brand text-white"
+                  : "border-border bg-background/40 text-muted hover:border-brand hover:text-foreground"
+              }`}
             >
-              {item}
-            </div>
+              {section.label}
+            </button>
           ))}
         </div>
 
@@ -62,6 +81,15 @@ function Gallery() {
                   className="h-72 animate-pulse rounded-2xl border border-border bg-surface-2"
                 />
               ))}
+            </div>
+          ) : filteredImages.length === 0 ? (
+            <div className="rounded-2xl border border-border bg-background/40 px-6 py-12 text-center">
+              <p className="font-semibold text-foreground">
+                Todavía no hay imágenes en esta sección.
+              </p>
+              <p className="mt-2 text-sm text-muted">
+                Cuando se carguen en la galería, van a aparecer acá.
+              </p>
             </div>
           ) : (
             <Swiper
@@ -85,10 +113,10 @@ function Gallery() {
                   slidesPerView: 3,
                 },
               }}
-              loop={images.length > 3}
+              loop={filteredImages.length > 3}
               className="!pb-12"
             >
-              {images.map((image) => (
+              {filteredImages.map((image) => (
                 <SwiperSlide key={image.id}>
                   <div className="group overflow-hidden rounded-2xl border border-border ring-1 ring-transparent transition-all duration-300 hover:ring-brand">
                     <img

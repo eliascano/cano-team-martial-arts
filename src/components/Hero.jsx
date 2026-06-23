@@ -85,14 +85,14 @@ function Hero() {
             href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
             target="_blank"
             rel="noreferrer"
-            className="rounded-lg bg-brand px-8 py-4 font-semibold text-foreground shadow-lg shadow-brand/20 transition-all duration-300 hover:bg-brand-strong hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-brand px-8 py-4 font-semibold text-white shadow-lg shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
           >
             Reservar Clase de Prueba
           </a>
 
           <a
             href="#disciplinas"
-            className="rounded-lg border border-border-strong bg-surface/40 px-8 py-4 font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-foreground hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-border-strong bg-surface/40 px-8 py-4 font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-foreground hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
           >
             Ver Disciplinas
           </a>

@@ -56,7 +56,7 @@ function Contact() {
                   )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center justify-between rounded-xl bg-[#16a34a] px-6 py-4 font-semibold text-white transition-all duration-300 hover:bg-[#15803d] hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16a34a]"
+                  className="group flex min-h-12 items-center justify-between rounded-xl bg-[#16a34a] px-6 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#15803d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16a34a]"
                 >
                   <span className="flex items-center gap-3">
                     <FaWhatsapp className="text-xl" aria-hidden="true" />

@@ -14,7 +14,6 @@ const navGroups = [
     label: "Academia",
     items: [
       { label: "Nosotros", id: "nosotros" },
-      { label: "Instructor", id: "instructor" },
       { label: "Testimonios", id: "testimonios" },
     ],
   },
@@ -171,7 +170,7 @@ function Navbar() {
             href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
             target="_blank"
             rel="noreferrer"
-            className="ml-3 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="ml-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <FaWhatsapp aria-hidden="true" />
             Clase de prueba
@@ -247,7 +246,7 @@ function Navbar() {
               target="_blank"
               rel="noreferrer"
               onClick={closeMenus}
-              className="mt-4 flex items-center justify-center gap-3 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white"
+              className="mt-4 flex min-h-12 items-center justify-center gap-3 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white"
             >
               <FaWhatsapp aria-hidden="true" />
               Reservar clase de prueba

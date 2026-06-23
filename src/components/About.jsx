@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FaAward, FaChevronDown } from "react-icons/fa";
 
 const pillars = [
   { title: "Disciplina", text: "Constancia y hábitos que trascienden el tatami." },
   { title: "Respeto", text: "Valores que formamos dentro y fuera de la academia." },
   { title: "Comunidad", text: "Niños, adolescentes y adultos entrenando juntos." },
+];
+
+const credentials = [
+  { title: "4 Dan", text: "Taekwon-Do ITF" },
+  { title: "Cinturón negro", text: "Brazilian Jiu-Jitsu" },
+  { title: "MMA", text: "Entrenamiento integral" },
+  { title: "Dirección técnica", text: "Cano Team Martial Arts" },
 ];
 
 function About() {
@@ -89,7 +96,7 @@ function About() {
                     type="button"
                     onClick={() => setShowTrajectory((current) => !current)}
                     aria-expanded={showTrajectory}
-                    className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border-strong bg-surface/80 px-4 py-2.5 text-sm font-semibold text-foreground backdrop-blur-sm transition-colors hover:border-brand hover:bg-brand-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                    className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border-strong bg-surface/80 px-4 py-2.5 text-sm font-semibold text-foreground backdrop-blur-sm transition-colors hover:border-brand hover:bg-brand-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                   >
                     <FaAward aria-hidden="true" />
                     Ver trayectoria
@@ -101,34 +108,65 @@ function About() {
                     />
                   </button>
                 </div>
-              </div>
 
-              {showTrajectory && (
-                <div className="border-t border-border p-5 sm:p-6">
-                  <p className="text-sm leading-relaxed text-muted">
-                    Dirección técnica y acompañamiento cercano para formar
-                    alumnos con disciplina, respeto y constancia. La enseñanza
-                    integra Taekwon-Do ITF, Brazilian Jiu-Jitsu y MMA con foco
-                    en objetivos reales: aprender, mejorar y pertenecer a una
-                    comunidad de entrenamiento.
-                  </p>
-
-                  <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    {["Formación técnica", "Trabajo por objetivos", "Comunidad"].map(
-                      (item) => (
-                        <div
-                          key={item}
-                          className="rounded-xl border border-border bg-background/50 p-4"
-                        >
-                          <p className="display text-sm font-semibold text-brand">
-                            {item}
-                          </p>
+                <AnimatePresence>
+                  {showTrajectory && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                      className="absolute inset-0 z-10 bg-background/94 p-4 backdrop-blur-sm sm:p-6"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
+                        className="flex h-full flex-col justify-between"
+                      >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="eyebrow mb-2">Trayectoria</p>
+                          <h4 className="display text-xl font-bold text-foreground sm:text-2xl">
+                            Pablo Cano
+                          </h4>
                         </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              )}
+
+                        <button
+                          type="button"
+                          onClick={() => setShowTrajectory(false)}
+                          className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-muted transition-colors hover:border-brand hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                        >
+                          Cerrar
+                        </button>
+                      </div>
+
+                      <p className="mt-4 text-sm leading-relaxed text-muted sm:mt-5">
+                        Dirección técnica con foco en disciplina, progreso y
+                        acompañamiento cercano para niños, jóvenes y adultos.
+                      </p>
+
+                      <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:gap-3">
+                        {credentials.map((item) => (
+                          <div
+                            key={item.title}
+                            className="rounded-xl border border-border bg-surface/80 p-3 sm:p-4"
+                          >
+                            <p className="display text-sm font-semibold text-brand sm:text-base">
+                              {item.title}
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-muted sm:text-sm">
+                              {item.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </motion.div>
         </div>

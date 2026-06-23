@@ -92,7 +92,7 @@ function FAQ() {
             href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-3 rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
           >
             <FaWhatsapp aria-hidden="true" />
             Reservar clase de prueba

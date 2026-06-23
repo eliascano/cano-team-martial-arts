@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaWhatsapp } from "react-icons/fa";
 import { getSchedules } from "../services/schedule";
 import SectionHeading from "./SectionHeading";
 
-const DISCIPLINE_ORDER = ["MMA", "Brazilian Jiu-Jitsu", "Taekwon-Do ITF"];
+const DISCIPLINE_ORDER = ["Taekwon-Do ITF", "Brazilian Jiu-Jitsu", "MMA"];
 const WHATSAPP_NUMBER = "543564657525";
+
+const getDisciplineSlug = (name) =>
+  name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 
 function groupSchedules(schedules) {
   const map = {};
@@ -24,7 +32,7 @@ function groupSchedules(schedules) {
 function Schedule() {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openDisciplines, setOpenDisciplines] = useState(["MMA"]);
+  const [openDiscipline, setOpenDiscipline] = useState(null);
 
   useEffect(() => {
     async function fetchSchedules() {
@@ -40,15 +48,74 @@ function Schedule() {
     fetchSchedules();
   }, []);
 
-  const grouped = groupSchedules(schedules);
-  const disciplines = DISCIPLINE_ORDER.filter((d) => grouped[d]);
+  const grouped = useMemo(() => groupSchedules(schedules), [schedules]);
+  const disciplines = useMemo(
+    () => DISCIPLINE_ORDER.filter((d) => grouped[d]),
+    [grouped]
+  );
+
+  const scrollToDiscipline = (discipline) => {
+    const target = document.getElementById(
+      `horarios-${getDisciplineSlug(discipline)}`
+    );
+
+    if (!target) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (!disciplines.length) return;
+
+    const openFromHash = () => {
+      const hash = window.location.hash;
+      const scheduleHash = hash.startsWith("#horarios-")
+        ? hash.replace("#horarios-", "")
+        : "";
+      const target = disciplines.find(
+        (discipline) => getDisciplineSlug(discipline) === scheduleHash
+      );
+
+      if (target) {
+        setOpenDiscipline(target);
+        scrollToDiscipline(target);
+      } else {
+        setOpenDiscipline(disciplines[0]);
+      }
+    };
+
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, [disciplines]);
+
+  useEffect(() => {
+    if (!disciplines.length) return;
+
+    const openFromDisciplineCard = (event) => {
+      const target = disciplines.find(
+        (discipline) => discipline === event.detail?.discipline
+      );
+
+      if (!target) return;
+
+      setOpenDiscipline(target);
+      scrollToDiscipline(target);
+    };
+
+    window.addEventListener("schedule:navigate", openFromDisciplineCard);
+
+    return () =>
+      window.removeEventListener("schedule:navigate", openFromDisciplineCard);
+  }, [disciplines]);
 
   const toggleDiscipline = (discipline) => {
-    setOpenDisciplines((current) =>
-      current.includes(discipline)
-        ? current.filter((item) => item !== discipline)
-        : [...current, discipline]
-    );
+    setOpenDiscipline((current) => (current === discipline ? null : discipline));
   };
 
   const getWhatsappHref = (discipline) => {
@@ -83,12 +150,13 @@ function Schedule() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="overflow-hidden rounded-2xl border border-border bg-surface"
+                className="scroll-mt-24 overflow-hidden rounded-2xl border border-border bg-surface md:scroll-mt-28"
+                id={`horarios-${getDisciplineSlug(discipline)}`}
               >
                 <button
                   type="button"
                   onClick={() => toggleDiscipline(discipline)}
-                  aria-expanded={openDisciplines.includes(discipline)}
+                  aria-expanded={openDiscipline === discipline}
                   className="flex w-full items-center justify-between gap-4 border-b border-border bg-surface-2 px-5 py-4 text-left transition-colors hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand sm:px-6"
                 >
                   <span className="flex items-center gap-3">
@@ -100,12 +168,12 @@ function Schedule() {
                   <FaChevronDown
                     aria-hidden="true"
                     className={`shrink-0 text-brand transition-transform duration-300 ${
-                      openDisciplines.includes(discipline) ? "rotate-180" : ""
+                      openDiscipline === discipline ? "rotate-180" : ""
                     }`}
                   />
                 </button>
 
-                {openDisciplines.includes(discipline) && (
+                {openDiscipline === discipline && (
                   <>
                     <div className="divide-y divide-border md:hidden">
                       {Object.entries(grouped[discipline]).map(([groupName, slots]) => (
@@ -194,7 +262,7 @@ function Schedule() {
                         href={getWhatsappHref(discipline)}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
+                        className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto"
                       >
                         <FaWhatsapp aria-hidden="true" />
                         Consultar esta disciplina
