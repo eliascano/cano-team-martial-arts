@@ -28,6 +28,16 @@ export async function getMyAccount(userId) {
   return { profile: profile.data, memberships: memberships.data ?? [], invoices: invoices.data ?? [], payments: payments.data ?? [] };
 }
 
+export async function getMembershipSummary(userId) {
+  const { data, error } = await supabase
+    .from("memberships")
+    .select("id,status,disciplines(name),fee_plans(name)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function getStudentDetails(userId) {
   const results = await Promise.all([
     supabase.from("memberships").select("*, disciplines(name), fee_plans(name, amount, currency)").eq("user_id", userId),

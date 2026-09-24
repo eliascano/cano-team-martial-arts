@@ -37,6 +37,22 @@ body {
   box-sizing: border-box;
 }
 
+:root {
+  --ct-interaction-duration: 300ms;
+  --ct-interaction-easing: cubic-bezier(0, 0, 0.2, 1);
+}
+
+:where(a[href], button, input, select, textarea, [role="button"]) {
+  transition-duration: var(--ct-interaction-duration) !important;
+  transition-timing-function: var(--ct-interaction-easing) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(a[href], button, input, select, textarea, [role="button"]) {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 #root {
   width: 100%;
   overflow-x: clip;

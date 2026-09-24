@@ -33,7 +33,7 @@ function RouteView() {
     }
     return <AccountPage />;
   }
-  return <><Navbar /><main><Hero /><About /><Disciplines /><Schedule /><Gallery /><Events /><Testimonials /><FAQ /><Contact /></main><BackToTop /><WhatsAppButton /><Footer /></>;
+  return <><Navbar /><main><Hero /><About /><Disciplines /><Schedule /><FAQ /><Testimonials /><Gallery /><Events /><Contact /></main><BackToTop /><WhatsAppButton /><Footer /></>;
 }
 
 function App() {

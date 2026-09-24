@@ -18,9 +18,11 @@ const getDisciplineSlug = (name) =>
 function groupSchedules(schedules) {
   const map = {};
   for (const s of schedules) {
-    if (!map[s.discipline]) map[s.discipline] = {};
-    if (!map[s.discipline][s.group_name]) map[s.discipline][s.group_name] = [];
-    map[s.discipline][s.group_name].push({
+    const disciplineName = s.discipline?.name;
+    if (!disciplineName) continue;
+    if (!map[disciplineName]) map[disciplineName] = {};
+    if (!map[disciplineName][s.group_name]) map[disciplineName][s.group_name] = [];
+    map[disciplineName][s.group_name].push({
       days: s.days,
       time: s.time,
       id: s.id,
@@ -51,7 +53,10 @@ function Schedule() {
 
   const grouped = useMemo(() => groupSchedules(schedules), [schedules]);
   const disciplines = useMemo(
-    () => DISCIPLINE_ORDER.filter((d) => grouped[d]),
+    () => [
+      ...DISCIPLINE_ORDER.filter((name) => grouped[name]),
+      ...Object.keys(grouped).filter((name) => !DISCIPLINE_ORDER.includes(name)).sort(),
+    ],
     [grouped]
   );
 

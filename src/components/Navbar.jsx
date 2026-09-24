@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { FaBars, FaChevronDown, FaSignOutAlt, FaTimes, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaChevronDown, FaSignOutAlt, FaTimes, FaUserCircle, FaDumbbell } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth.js";
 import { signOut } from "../services/auth";
+import { getMembershipSummary } from "../services/billing";
 
 const navGroups = [
+  {
+    label: "Academia",
+    items: [
+      { label: "Nosotros", id: "nosotros" },
+    ],
+  },
   {
     label: "Entrenar",
     items: [
@@ -13,15 +20,9 @@ const navGroups = [
     ],
   },
   {
-    label: "Academia",
-    items: [
-      { label: "Nosotros", id: "nosotros" },
-      { label: "Testimonios", id: "testimonios" },
-    ],
-  },
-  {
     label: "Comunidad",
     items: [
+      { label: "Testimonios", id: "testimonios" },
       { label: "Galería", id: "galeria" },
       { label: "Eventos", id: "eventos" },
     ],
@@ -41,9 +42,11 @@ function Navbar() {
   const [active, setActive] = useState("inicio");
   const [desktopMenu, setDesktopMenu] = useState(null);
   const [accountMenu, setAccountMenu] = useState(false);
-  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0] || "Mi cuenta";
+  const [memberships, setMemberships] = useState([]);
+  const [membershipError, setMembershipError] = useState(false);
+  const accountName = profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0] || "Mi cuenta";
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || "";
-  const initials = displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "CT";
+  const initials = accountName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "CT";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -51,6 +54,24 @@ function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let cancelled = false;
+    getMembershipSummary(user.id).then((items) => { if (!cancelled) { setMemberships(items); setMembershipError(false); } }).catch(() => { if (!cancelled) setMembershipError(true); });
+    return () => { cancelled = true; };
+  }, [user]);
+
+  useEffect(() => {
+    if (!accountMenu) return undefined;
+    const onPointerDown = (event) => {
+      if (!event.target.closest?.("[data-account-menu]")) setAccountMenu(false);
+    };
+    const onKeyDown = (event) => { if (event.key === "Escape") setAccountMenu(false); };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => { document.removeEventListener("pointerdown", onPointerDown); document.removeEventListener("keydown", onKeyDown); };
+  }, [accountMenu]);
 
   useEffect(() => {
     const sections = allLinks
@@ -179,21 +200,12 @@ function Navbar() {
             Contacto
           </a>
 
-          {user ? <div className="relative ml-3">
-            <button type="button" aria-expanded={accountMenu} aria-haspopup="menu" onClick={() => setAccountMenu((current) => !current)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface/80 py-1.5 pl-1.5 pr-3 text-sm font-medium text-foreground transition-colors hover:border-brand">
-              <UserAvatar url={avatarUrl} initials={initials} />
-              <span className="max-w-28 truncate">{displayName}</span>
-              <FaChevronDown aria-hidden="true" className={`text-xs text-muted transition-transform ${accountMenu ? "rotate-180" : ""}`} />
-            </button>
-            {accountMenu && <div role="menu" className="absolute right-0 top-full mt-2 w-60 overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl">
-              <div className="border-b border-border px-3 py-2"><p className="truncate text-sm font-semibold text-foreground">{displayName}</p><p className="truncate text-xs text-muted">{user.email}</p></div>
-              <a role="menuitem" href="/mi-cuenta" onClick={closeMenus} className="mt-1 flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>
-              {profile?.role === "admin" && <a role="menuitem" href="/admin" onClick={closeMenus} className="flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground">Panel administrativo</a>}
-              <button role="menuitem" type="button" onClick={() => void logout()} className="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-muted transition-colors hover:bg-surface hover:text-foreground"><FaSignOutAlt aria-hidden="true" /> Cerrar sesión</button>
-            </div>}
-          </div> : <a href="/login" className="ml-3 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-foreground"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>}
+          {user ? <AccountMenu accountMenu={accountMenu} setAccountMenu={setAccountMenu} avatarUrl={avatarUrl} initials={initials} accountName={accountName} email={user.email} profile={profile} memberships={memberships} membershipError={membershipError} logout={logout} closeMenus={closeMenus} />
+            : <a href="/login" className="ml-3 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-foreground"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>}
         </div>
 
+        <div className="flex items-center gap-2 lg:hidden">
+        {user && <AccountMenu accountMenu={accountMenu} setAccountMenu={setAccountMenu} avatarUrl={avatarUrl} initials={initials} accountName={accountName} email={user.email} profile={profile} memberships={memberships} membershipError={membershipError} logout={logout} closeMenus={closeMenus} />}
         <button
           className="rounded-lg border border-border bg-background/60 p-3 text-xl text-foreground lg:hidden"
           onClick={() => setOpen(!open)}
@@ -202,6 +214,7 @@ function Navbar() {
         >
           {open ? <FaTimes /> : <FaBars />}
         </button>
+        </div>
       </nav>
 
       {open && (
@@ -258,17 +271,27 @@ function Navbar() {
               Contacto
             </a>
 
-            {user ? <div className="mt-4 rounded-xl border border-border bg-surface p-3">
-              <div className="flex items-center gap-3"><UserAvatar url={avatarUrl} initials={initials} size="h-10 w-10" /><div className="min-w-0"><p className="truncate text-sm font-semibold text-foreground">{displayName}</p><p className="truncate text-xs text-muted">{user.email}</p></div></div>
-              <a href="/mi-cuenta" onClick={closeMenus} className="mt-3 flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground"><FaUserCircle aria-hidden="true" /> Gestionar mi cuenta</a>
-              {profile?.role === "admin" && <a href="/admin" onClick={closeMenus} className="flex min-h-10 items-center px-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground">Panel administrativo</a>}
-              <button type="button" onClick={() => void logout()} className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground"><FaSignOutAlt aria-hidden="true" /> Cerrar sesión</button>
-            </div> : <a href="/login" onClick={closeMenus} className="mt-4 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-brand"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>}
+            {!user && <a href="/login" onClick={closeMenus} className="mt-4 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-brand"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>}
           </div>
         </div>
       )}
     </header>
   );
+}
+
+function AccountMenu({ accountMenu, setAccountMenu, avatarUrl, initials, accountName, email, profile, memberships, membershipError, logout, closeMenus }) {
+  return <div className="relative" data-account-menu>
+    <button type="button" aria-label="Abrir perfil" aria-expanded={accountMenu} aria-haspopup="dialog" onClick={() => setAccountMenu((current) => !current)} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface/80 p-1 transition-colors hover:border-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+      <UserAvatar url={avatarUrl} initials={initials} size="h-9 w-9" />
+    </button>
+    {accountMenu && <section role="dialog" aria-label="Resumen de cuenta" className="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-background/95 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
+      <div className="flex items-start justify-between gap-3 border-b border-border pb-3"><div className="flex min-w-0 items-center gap-3"><UserAvatar url={avatarUrl} initials={initials} size="h-10 w-10" /><div className="min-w-0"><p className="truncate text-sm font-semibold text-foreground">{accountName}</p><p className="truncate text-xs text-muted">{email}</p></div></div><button type="button" aria-label="Cerrar panel" onClick={() => setAccountMenu(false)} className="rounded-md px-2 py-1 text-lg leading-none text-muted transition-colors hover:bg-surface hover:text-foreground">×</button></div>
+      <div className="py-3"><p className="text-xs font-semibold uppercase tracking-wider text-muted">Disciplinas</p>{membershipError ? <p className="mt-2 text-xs text-muted">No se pudieron cargar las membresías.</p> : memberships.length ? <ul className="mt-2 space-y-1.5">{memberships.slice(0, 3).map((item) => <li key={item.id} className="flex items-center justify-between gap-2 text-sm"><span className="inline-flex min-w-0 items-center gap-2 truncate"><FaDumbbell aria-hidden="true" className="shrink-0 text-brand" />{item.disciplines?.name ?? "Disciplina"}</span><span className="shrink-0 text-xs text-muted">{item.status}</span></li>)}</ul> : <p className="mt-2 text-xs text-muted">Sin membresías registradas</p>}</div>
+      <a href="/mi-cuenta" onClick={closeMenus} className="flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground"><FaUserCircle aria-hidden="true" /> Mi perfil</a>
+      {profile?.role === "admin" && <a href="/admin" onClick={closeMenus} className="flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground">Panel administrativo</a>}
+      <button type="button" onClick={() => void logout()} className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-sm text-muted transition-colors hover:bg-surface hover:text-foreground"><FaSignOutAlt aria-hidden="true" /> Cerrar sesión</button>
+    </section>}
+  </div>;
 }
 
 function UserAvatar({ url, initials, size = "h-8 w-8" }) {
