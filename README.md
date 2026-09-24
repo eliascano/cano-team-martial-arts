@@ -11,7 +11,7 @@ Aplicación React + Vite conectada a Supabase. El sitio público usa los registr
 5. Desplegar `supabase/functions/admin-profile-emails` con la Supabase CLI para que el panel pueda buscar alumnos por email. La función valida la sesión y `profiles.role` antes de usar Auth Admin; su service role queda en el entorno de Edge Functions.
 6. Registrar al primer administrador, comprobar su UUID y promoverlo desde un SQL Editor de confianza con la consulta comentada al final de la migración.
 
-La migración crea automáticamente `profiles` al registrar un usuario y asigna `role = 'user'`. Un usuario no puede cambiar su propio rol. El panel `/admin` también verifica el rol para la navegación, y RLS en Supabase protege las tablas y Storage.
+La migración crea automáticamente `profiles` al registrar un usuario y asigna `role = 'user'`. También incluye una función segura para completar el perfil de una cuenta Auth preexistente si le faltara la fila. Un usuario no puede cambiar su propio rol. El panel `/admin` también verifica el rol para la navegación, y RLS en Supabase protege las tablas y Storage.
 
 ## Desarrollo
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChange, getSession } from "../services/auth";
-import { getProfile } from "../services/profiles";
+import { ensureCurrentProfile, getProfile } from "../services/profiles";
 import { AuthContext } from "./authContext";
 
 export function AuthProvider({ children }) {
@@ -12,7 +12,11 @@ export function AuthProvider({ children }) {
     const loadUser = async (current) => {
       setSession(current);
       if (!current?.user) { setProfile(null); setLoading(false); return; }
-      try { const row = await getProfile(current.user.id); if (active) setProfile(row); }
+      try {
+        let row = await getProfile(current.user.id);
+        if (!row) row = await ensureCurrentProfile();
+        if (active) setProfile(row);
+      }
       catch { if (active) setProfile(null); }
       finally { if (active) setLoading(false); }
     };

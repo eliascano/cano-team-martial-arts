@@ -4,6 +4,11 @@ export async function getProfile(id) {
   if (error) throw error;
   return data;
 }
+export async function ensureCurrentProfile() {
+  const { data, error } = await supabase.rpc("ensure_current_profile");
+  if (error) throw error;
+  return data;
+}
 export async function updateProfile(id, values) {
   const { data, error } = await supabase.from("profiles").update(values).eq("id", id).select().single();
   if (error) throw error;

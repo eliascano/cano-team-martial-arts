@@ -19,6 +19,35 @@ create trigger on_auth_user_created_profile
 after insert on auth.users
 for each row execute procedure public.handle_new_auth_user();
 
+-- Safe recovery for an existing Auth user if the profile row was absent before
+-- this migration. The caller cannot provide a role or another user's ID.
+create or replace function public.ensure_current_profile()
+returns public.profiles
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  current_profile public.profiles;
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  insert into public.profiles (id, full_name, role)
+  values (
+    auth.uid(),
+    coalesce(auth.jwt() -> 'user_metadata' ->> 'full_name', auth.jwt() -> 'user_metadata' ->> 'name', ''),
+    'user'
+  )
+  on conflict (id) do nothing
+  returning * into current_profile;
+  if not found then
+    select * into current_profile from public.profiles where id = auth.uid();
+  end if;
+  return current_profile;
+end;
+$$;
+revoke all on function public.ensure_current_profile() from public;
+grant execute on function public.ensure_current_profile() to authenticated;
+
 create or replace function public.current_profile_role()
 returns text
 language sql
