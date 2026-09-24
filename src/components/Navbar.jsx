@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaBars, FaChevronDown, FaTimes, FaWhatsapp } from "react-icons/fa";
+import { FaBars, FaChevronDown, FaTimes, FaUserCircle } from "react-icons/fa";
 
 const navGroups = [
   {
@@ -166,16 +166,7 @@ function Navbar() {
             Contacto
           </a>
 
-          <a
-            href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
-            target="_blank"
-            rel="noreferrer"
-            className="ml-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-          >
-            <FaWhatsapp aria-hidden="true" />
-            Clase de prueba
-          </a>
-          <a href="/login" className="ml-2 rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-foreground">Mi cuenta</a>
+          <a href="/login" className="ml-3 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-foreground"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>
         </div>
 
         <button
@@ -242,17 +233,7 @@ function Navbar() {
               Contacto
             </a>
 
-            <a
-              href="https://wa.me/543564657525?text=Hola%20Pablo!%20Quiero%20reservar%20una%20clase%20de%20prueba.%20%C2%BFMe%20pas%C3%A1s%20informaci%C3%B3n%3F"
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeMenus}
-              className="mt-4 flex min-h-12 items-center justify-center gap-3 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white"
-            >
-              <FaWhatsapp aria-hidden="true" />
-              Reservar clase de prueba
-            </a>
-            <a href="/login" onClick={closeMenus} className="mt-3 block rounded-lg border border-border px-4 py-3 text-center text-sm font-semibold text-foreground">Mi cuenta</a>
+            <a href="/login" onClick={closeMenus} className="mt-4 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-brand"><FaUserCircle aria-hidden="true" /> Mi cuenta</a>
           </div>
         </div>
       )}
