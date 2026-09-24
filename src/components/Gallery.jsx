@@ -18,6 +18,7 @@ const gallerySections = [
 function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [activeSection, setActiveSection] = useState("EV");
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function Gallery() {
         const data = await getGallery();
         setImages(data || []);
       } catch (error) {
-        console.error(error);
+        setError(error.message || "No se pudo cargar la galería.");
       } finally {
         setLoading(false);
       }
@@ -82,10 +83,12 @@ function Gallery() {
                 />
               ))}
             </div>
+          ) : error ? (
+            <div role="alert" className="rounded-2xl border border-red-900 bg-red-950/20 px-6 py-10 text-center text-red-300">{error}</div>
           ) : filteredImages.length === 0 ? (
             <div className="rounded-2xl border border-border bg-background/40 px-6 py-12 text-center">
-              <p className="font-semibold text-foreground">
-                Todavía no hay imágenes en esta sección.
+                <p className="font-semibold text-foreground">
+                Todavía no hay contenido en esta sección.
               </p>
               <p className="mt-2 text-sm text-muted">
                 Cuando se carguen en la galería, van a aparecer acá.
@@ -119,11 +122,11 @@ function Gallery() {
               {filteredImages.map((image) => (
                 <SwiperSlide key={image.id}>
                   <div className="group overflow-hidden rounded-2xl border border-border ring-1 ring-transparent transition-all duration-300 hover:ring-brand">
-                    <img
-                      src={image.image_url}
-                      alt="Galería Cano Team"
-                      className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+                    {image.media_type === "video" ? (
+                      <video src={image.image_url} controls playsInline preload="metadata" poster={image.poster_url || undefined} aria-label={image.title || "Video de la galería Cano Team"} className="h-72 w-full bg-black object-cover" />
+                    ) : (
+                      <img src={image.image_url} alt={image.alt_text || image.title || "Galería Cano Team"} className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    )}
                   </div>
                 </SwiperSlide>
               ))}

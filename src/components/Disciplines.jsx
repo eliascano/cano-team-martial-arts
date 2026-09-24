@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaCalendarAlt } from "react-icons/fa";
-import { disciplines } from "../data/disciplines";
+import { getDisciplines } from "../services/disciplines";
 import SectionHeading from "./SectionHeading";
+
+const imageByName = {
+  "Taekwon-Do ITF": "/images/taekwondo.jpg",
+  "Brazilian Jiu-Jitsu": "/images/bjj.jpg",
+  MMA: "/images/mma.jpg",
+};
+const disciplineOrder = ["Taekwon-Do ITF", "Brazilian Jiu-Jitsu", "MMA"];
 
 const getDisciplineSlug = (name) =>
   name
@@ -12,6 +20,14 @@ const getDisciplineSlug = (name) =>
     .replace(/(^-|-$)/g, "");
 
 function Disciplines() {
+  const [disciplines, setDisciplines] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    getDisciplines().then((rows) => setDisciplines(rows.sort((a, b) => disciplineOrder.indexOf(a.name) - disciplineOrder.indexOf(b.name))))
+      .catch((reason) => setError(reason.message || "No se pudieron cargar las disciplinas."))
+      .finally(() => setLoading(false));
+  }, []);
   const navigateToSchedule = (event, disciplineName) => {
     if (
       event.metaKey ||
@@ -43,7 +59,7 @@ function Disciplines() {
           subtitle="Programas para todas las edades y niveles, guiados por instructores con experiencia."
         />
 
-        <div className="grid gap-8 md:grid-cols-3">
+        {loading ? <div className="grid gap-8 md:grid-cols-3">{[1,2,3].map((item)=><div key={item} className="h-96 animate-pulse rounded-2xl border border-border bg-surface-2" />)}</div> : error ? <div role="alert" className="rounded-2xl border border-red-900 bg-red-950/20 px-6 py-10 text-center text-red-300">{error}</div> : disciplines.length === 0 ? <div className="rounded-2xl border border-border bg-surface-2 px-6 py-10 text-center text-muted">No hay disciplinas activas para mostrar.</div> : <div className="grid gap-8 md:grid-cols-3">
           {disciplines.map((discipline, i) => (
             <motion.article
               key={discipline.name}
@@ -55,7 +71,7 @@ function Disciplines() {
             >
               <div className="relative h-60 overflow-hidden">
                 <img
-                  src={discipline.image}
+                  src={imageByName[discipline.name] || "/images/mma.jpg"}
                   alt={discipline.name}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -81,7 +97,7 @@ function Disciplines() {
               </div>
             </motion.article>
           ))}
-        </div>
+        </div>}
       </div>
     </section>
   );

@@ -1,16 +1,27 @@
-# React + Vite
+# Cano Team Martial Arts
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación React + Vite conectada a Supabase. El sitio público usa los registros activos de Supabase para disciplinas, horarios, galería y eventos, y los registros existentes de testimonios.
 
-Currently, two official plugins are available:
+## Configuración
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Crear `.env.local` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` (clave pública anon/publishable; nunca usar service role ni secretos en el navegador).
+2. Ejecutar `supabase/migrations/20260924_auth_rls.sql` en el SQL Editor del proyecto Supabase. Revisar las políticas existentes para las tablas y `storage.objects`: las políticas permisivas de PostgreSQL se combinan con OR.
+3. Confirmar que el bucket público `cano-team` y sus políticas admiten lectura pública y escritura de administradores, con MIME y límites coherentes con la aplicación.
+4. Configurar en Supabase Auth las URLs de redirección local y de producción y habilitar Google OAuth con sus credenciales de proveedor.
+5. Desplegar `supabase/functions/admin-profile-emails` con la Supabase CLI para que el panel pueda buscar alumnos por email. La función valida la sesión y `profiles.role` antes de usar Auth Admin; su service role queda en el entorno de Edge Functions.
+6. Registrar al primer administrador, comprobar su UUID y promoverlo desde un SQL Editor de confianza con la consulta comentada al final de la migración.
 
-## React Compiler
+La migración crea automáticamente `profiles` al registrar un usuario y asigna `role = 'user'`. Un usuario no puede cambiar su propio rol. El panel `/admin` también verifica el rol para la navegación, y RLS en Supabase protege las tablas y Storage.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Desarrollo
 
-## Expanding the ESLint configuration
+```sh
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Verificaciones disponibles: `npm run lint` y `npm run build`.
+
+## Pagos
+
+`/mi-cuenta` muestra cuotas y pagos existentes. El botón de pago informa que falta configurar el backend seguro. La integración real requiere una Supabase Edge Function y credenciales/documentación oficiales de Payway; el frontend no contiene secretos ni simula aprobaciones.

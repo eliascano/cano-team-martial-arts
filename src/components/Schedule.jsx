@@ -32,6 +32,7 @@ function groupSchedules(schedules) {
 function Schedule() {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [openDiscipline, setOpenDiscipline] = useState(null);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function Schedule() {
         const data = await getSchedules();
         setSchedules(data);
       } catch (error) {
-        console.error(error);
+        setError(error.message || "No se pudieron cargar los horarios.");
       } finally {
         setLoading(false);
       }
@@ -141,6 +142,10 @@ function Schedule() {
               />
             ))}
           </div>
+        ) : error ? (
+          <div role="alert" className="rounded-2xl border border-red-900 bg-red-950/20 px-6 py-10 text-center text-red-300">{error}</div>
+        ) : disciplines.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-surface px-6 py-10 text-center text-muted">Todavía no hay horarios publicados.</div>
         ) : (
           <div className="flex flex-col gap-8">
             {disciplines.map((discipline, i) => (

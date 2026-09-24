@@ -12,6 +12,7 @@ import SectionHeading from "./SectionHeading";
 function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchEvents() {
@@ -19,7 +20,7 @@ function Events() {
         const data = await getEvents();
         setEvents(data || []);
       } catch (error) {
-        console.error(error);
+        setError(error.message || "No se pudieron cargar los eventos.");
       } finally {
         setLoading(false);
       }
@@ -46,6 +47,10 @@ function Events() {
               />
             ))}
           </div>
+        ) : error ? (
+          <div role="alert" className="rounded-2xl border border-red-900 bg-red-950/20 px-6 py-10 text-center text-red-300">{error}</div>
+        ) : events.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-surface px-6 py-12 text-center text-muted">No hay eventos próximos publicados.</div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {events.map((event, i) => {
@@ -72,19 +77,19 @@ function Events() {
                       : ""
                   }`}
                 >
-                  {imageSrc && (
+                  {(imageSrc || event.video_url) && (
                     <div
                       className={`relative overflow-hidden ${
                         isBanner ? "h-60 sm:h-72 md:h-full md:min-h-80" : "h-72 sm:h-80"
                       }`}
                     >
-                      <img
+                      {event.video_url ? <video src={event.video_url} controls playsInline preload="metadata" poster={imageSrc || undefined} aria-label={event.title} className="h-full w-full bg-black object-cover" /> : <img
                         src={imageSrc}
                         alt={event.title}
                         className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
                           isBanner ? "object-center" : "object-top"
                         }`}
-                      />
+                      />}
 
                       <div
                         className={`absolute ${

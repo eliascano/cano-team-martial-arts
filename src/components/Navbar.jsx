@@ -175,6 +175,7 @@ function Navbar() {
             <FaWhatsapp aria-hidden="true" />
             Clase de prueba
           </a>
+          <a href="/login" className="ml-2 rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-foreground">Mi cuenta</a>
         </div>
 
         <button
@@ -251,6 +252,7 @@ function Navbar() {
               <FaWhatsapp aria-hidden="true" />
               Reservar clase de prueba
             </a>
+            <a href="/login" onClick={closeMenus} className="mt-3 block rounded-lg border border-border px-4 py-3 text-center text-sm font-semibold text-foreground">Mi cuenta</a>
           </div>
         </div>
       )}

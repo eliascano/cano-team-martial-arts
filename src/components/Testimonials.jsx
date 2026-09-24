@@ -7,6 +7,7 @@ import SectionHeading from "./SectionHeading";
 function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchTestimonials() {
@@ -14,7 +15,7 @@ function Testimonials() {
         const data = await getTestimonials();
         setTestimonials(data || []);
       } catch (error) {
-        console.error(error);
+        setError(error.message || "No se pudieron cargar los testimonios.");
       } finally {
         setLoading(false);
       }
@@ -41,6 +42,10 @@ function Testimonials() {
               />
             ))}
           </div>
+        ) : error ? (
+          <div role="alert" className="rounded-2xl border border-red-900 bg-red-950/20 px-6 py-10 text-center text-red-300">{error}</div>
+        ) : testimonials.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-surface-2 px-6 py-10 text-center text-muted">Todavía no hay testimonios publicados.</div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {testimonials.map((testimonial, i) => (
