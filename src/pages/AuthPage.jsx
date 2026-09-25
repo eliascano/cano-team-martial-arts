@@ -69,7 +69,7 @@ export default function AuthPage({ mode = "login" }) {
       <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 shadow-2xl shadow-black/20">
         <FaCheckCircle aria-hidden="true" className="mx-auto text-3xl text-brand" />
         <p className="display mt-4 text-2xl font-bold">Sesión iniciada</p>
-        <a href="/mi-cuenta" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong">Ir a mi cuenta</a>
+        <a href="/" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong">Volver al inicio</a>
       </motion.section>
     </main>;
   }
